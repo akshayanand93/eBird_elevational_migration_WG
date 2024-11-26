@@ -1,0 +1,25 @@
+Predictor,Estimate,LCI,UCI,SE,Z value,P value
+Summer,,,,,,
+(Intercept),-0.702,-1.069,-0.335,0.187,-3.751,<0.001
+Temperature Tolerance Range,0.642,0.283,1.002,0.183,3.501,<0.001
+Precipitation Tolerance Range,-0.43,-0.873,0.012,0.226,-1.906,0.057
+Temperature Median,0.287,-0.138,0.712,0.217,1.323,0.186
+Precipitation Median,0.487,0.023,0.951,0.237,2.058,0.04
+Monsoon,,,,,,
+(Intercept),0.799,-0.935,2.533,0.885,0.904,0.366
+HWI,-0.198,-0.52,0.124,0.164,-1.204,0.229
+Invertivore,-0.242,-0.964,0.481,0.369,-0.655,0.512
+Vertivore,0.865,-4.389,6.119,2.681,0.323,0.747
+Frugivore,-1.083,-1.981,-0.185,0.458,-2.363,0.018
+Granivore,-0.458,-1.48,0.563,0.521,-0.88,0.379
+Nectarivore,-0.062,-1.937,1.813,0.956,-0.065,0.948
+Aquatic Predator,-1.501,-3.184,0.182,0.859,-1.748,0.08
+Temperature Tolerance Range,0.347,0.082,0.612,0.135,2.57,0.01
+Precipitation Tolerance Range,-0.43,-0.734,-0.126,0.155,-2.772,0.006
+Wind Speed Tolerance Range,0.222,-0.098,0.541,0.163,1.359,0.174
+Precipitation Median,0.285,-0.003,0.573,0.147,1.941,0.052
+Wind Speed Median,-0.374,-0.758,0.011,0.196,-1.906,0.057
+Winter,,,,,,
+(Intercept),-1.17,-1.736,-0.604,0.289,-4.052,<0.001
+Temperature Tolerance Range,0.497,0.157,0.836,0.173,2.867,0.004
+Precipitation Median,0.464,0.095,0.834,0.189,2.461,0.014
