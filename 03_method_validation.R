@@ -1,9 +1,11 @@
+#clear environment and perform garbage collection
+rm(list = ls())
+gc()
+
+#load required_libraries
 library(data.table)
 library(raster)
-library(parallel)
-library(dplyr)
 library(ggplot2)
-library(gridExtra)
 library(tidyverse)
 library(stringr)
 library(ggpubr)
@@ -12,7 +14,6 @@ library(cowplot)
 
 theme_set(theme_pubclean())
 mycolors <- c(summer = "#C5283D", winter = "#1C3144", monsoon = "#228B22")
-
 
 #Process trait and eBrid data
 
@@ -578,5 +579,5 @@ summer_panel <- plot_grid(scatter_s_q1_100, scatter_s_q1_30, scatter_s_q2_100,
                           ncol = 2, nrow = 3, align = "vh")
 
 #save plots
-ggsave("output/method_compare_w.tif", winter_panel, device = "tif", height = 230, width = 168, units = "mm", dpi = 600)
-ggsave("output/method_compare_s.tif", summer_panel, device = "tif", height = 230, width = 168, units = "mm", dpi = 600)
+ggsave("figs/method_compare_s_S1.2.tif", summer_panel, device = "tif", height = 230, width = 168, units = "mm", dpi = 600)
+ggsave("figs/method_compare_w_S1.3.tif", winter_panel, device = "tif", height = 230, width = 168, units = "mm", dpi = 600)

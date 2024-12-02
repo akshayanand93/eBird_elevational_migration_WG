@@ -1,3 +1,8 @@
+#clear environment and perform garbage collection
+rm(list = ls())
+gc()
+
+#load required libraries
 library(terra)
 library(sf)
 library(data.table)

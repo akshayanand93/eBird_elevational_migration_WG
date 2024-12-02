@@ -1,3 +1,7 @@
+#clear environment and perform garbage collection
+rm(list = ls())
+gc()
+
 #load required libraries
 library(tidyverse)
 library(data.table)
@@ -128,10 +132,9 @@ elev_mig_mod_wg <- elev_mig_wg %>%
 elev_mig_mod_wg[c(7, 8, 10:18)] <- lapply(elev_mig_mod_wg[c(7, 8, 10:18)], 
                                        function(x) c(scale(x)))
 
-
-#converting diet to factor and setting refernce level
-elev_mig_mod_wg$diet <- factor(relevel(elev_mig_mod_wg$diet, ref = "Invertivore"))
-
+#converting diet to factor and setting reference level
+elev_mig_mod_wg$diet <- as.factor(elev_mig_mod_wg$diet)
+elev_mig_mod_wg$diet <- factor(relevel(elev_mig_mod_wg$diet, ref = "Omnivore"))
 
 #histograms of predictors
 hist(elev_mig_wg$hwi, breaks = 50)
@@ -192,9 +195,10 @@ s_chi_test <- chisq.test(s_slope_table)#highly significant
 #check assumptions
 s_chi_test$expected#all good
 
+
 #------------------------------------------------------------------------------#
 
-#testing if elevational shifts are phylogenetically conserved
+##binomial model to test if traits explain migration status (migrant vs non-migrant)
 #getting phylo tree
 resident_species <- unique(elev_mig_mod_wg$scientific_name)
 
@@ -216,54 +220,12 @@ resident_list <- read_csv("data/resident_list.csv")
 resident_tree <- get_tree(sp_list = resident_list, taxon = "bird", scenario = "at_basal_node")
 
 #consensus tree
+set.seed(42)
 cons_resident_tree <- ls.consensus(resident_tree)
-
-#check names
-name.check(cons_resident_tree, elev_mig_mod$scientific_name)
 
 #save the consensus tree
 write.tree(cons_resident_tree, "output/cons_resident_tree_wg.tree")
 
-#computing Pagel's lambda and Bloomberg's K
-#monsoon
-#create a named number list
-m_migrant_shift <- elev_mig_mod_wg$m_dist_abs
-names(m_migrant_shift) <- resident_species
-
-#computing Blomberg's K-statistic
-phylosig(cons_resident_tree, m_migrant_shift, method = "K", test = TRUE, nsim = 1000)#K = 0.226, P = 0.22
-
-#computing Pagel's Lambda
-phylosig(cons_resident_tree, m_migrant_shift, method = "lambda", test = TRUE)#l = 0.000073, P = 1
-
-#winter
-#create a named number list
-w_migrant_shift <- elev_mig_mod_wg$w_dist_abs
-names(w_migrant_shift) <- resident_species
-
-#computing Blomberg's K-statistic
-phylosig(cons_resident_tree, w_migrant_shift, method = "K", test = TRUE, nsim = 1000)#K = 0.298, P = 0.022
-
-#computing Pagel's Lambda
-phylosig(cons_resident_tree, w_migrant_shift, method = "lambda", test = TRUE)#l = 7.396e-5, P = 1
-
-#summer
-#create a named number list
-s_migrant_shift <- elev_mig_mod_wg$s_dist_abs
-names(s_migrant_shift) <- resident_species
-
-#computing Blomberg's K-statistic
-phylosig(cons_resident_tree, s_migrant_shift, method = "K", test = TRUE, nsim = 1000)#K = 0.331, P = 0.015
-
-#computing Pagel's Lambda
-phylosig(cons_resident_tree, s_migrant_shift, method = "lambda", test = TRUE)#l = 7.396e-5, P = 1
-
-#considering there is evidence that seasonal shifts are phylogenetically conserved 
-#phylogenetic logistic regression models are suitable
-
-#------------------------------------------------------------------------------#
-
-##binomial model to test if traits explain migration status (migrant vs non-migrant)
 #convert response (migrant) variable to binary
 elev_mig_mod_wg$migrant <- ifelse(elev_mig_mod_wg$migrant == "non-migrant", 0, 1)
 
@@ -283,16 +245,14 @@ s_binom_mod_mean <- phyloglm(s_migrant ~ hwi + mass + diet + temp_breadth + prec
                               wind_breadth + temp_mean + precip_mean + wind_mean, 
                             data = elev_mig_binom_df_wg, phy = cons_resident_tree, 
                             method = "logistic_MPLE")
-summary(s_binom_mod_mean)#AIC     logLik Pen.logLik 
-                         #212.26     -90.13     -77.11 
+summary(s_binom_mod_mean) 
 
 s_binom_mod_med <- phyloglm(s_migrant ~ hwi + mass + diet + temp_breadth + precip_breadth +
                               wind_breadth + temp_med + precip_med + wind_med, 
                             data = elev_mig_binom_df_wg, phy = cons_resident_tree, 
                             method = "logistic_MPLE")
 
-summary(s_binom_mod_med)#AIC     logLik Pen.logLik 
-                        #212.59     -90.29     -76.56
+summary(s_binom_mod_med) 
 #the model with the mean environmental tolerances performs marginally better, however
 #we will move forward with the median envt. tolerances as that gives us a clearer estimate 
 #of typical environmental values a species experiences
@@ -400,7 +360,8 @@ write.csv(binom_mod_results, "output/table_2_binom_mod_results.csv", row.names =
 #summer
 #separate predictor
 s_binom_mod_table$Predictor <- c("(Intercept)","Temperature\nTolerance\nRange", 
-                                 "Precipitation\nTolerance\nRange", "Temperature\nMedian", 
+                                 "Precipitation\nTolerance\nRange", 
+                                 "Temperature\nMedian", 
                                  "Precipitation\nMedian")
 
 #plot
@@ -424,12 +385,12 @@ s_binom_mod_plot
 m_binom_mod_table$Predictor <- c(
   "(Intercept)",
   "HWI",
-  "Invertivore",
-  "Vertivore",
+  "Aquatic\nPredator",
   "Frugivore",
   "Granivore",
+  "Invertivore",
   "Nectarivore",
-  "Aquatic\nPredator",
+  "Vertivore",
   "Temperature\nTolerance\nRange",
   "Precipitation\nTolerance\nRange",
   "Wind Speed\nTolerance\nRange",
@@ -523,3 +484,6 @@ ggsave("figs/binom_model_estimates_wg.tif",
        width = 110, 
        units = "mm", 
        dpi = 800)
+
+#save workspace image
+save.image("05_data_prep_phyloglm.RData")

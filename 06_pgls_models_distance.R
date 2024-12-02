@@ -1,3 +1,8 @@
+#clear environment and perform garbage collection
+rm(list = ls())
+gc()
+
+#load required libraries
 library(tidyverse)
 library(MuMIn)
 library(caper)
@@ -22,7 +27,8 @@ elev_mig_mod_wg[c(7, 8, 10:18)] <- lapply(elev_mig_mod_wg[c(7, 8, 10:18)],
 
 
 #converting diet to factor and setting reference level
-elev_mig_mod_wg$diet <- factor(relevel(elev_mig_mod_wg$diet, ref = "Invertivore"))
+elev_mig_mod_wg$diet <- as.factor(elev_mig_mod_wg$diet)
+elev_mig_mod_wg$diet <- factor(relevel(elev_mig_mod_wg$diet, ref = "Omnivore"))
 
 #running seasonal PGLS models of migration distance ~ traits
 #convert to data frame
@@ -47,7 +53,7 @@ m_mod_wg_med <- pgls(m_dist_abs ~ hwi + mass + diet + precip_breadth + temp_brea
                        wind_breadth + precip_med + temp_med + wind_med, 
                      data = elev_mig_wg_pgls, lambda = "ML")
 summary(m_mod_wg_med)
-plot(m_mod)
+plot(m_mod_wg_med)
 
 #computing AIC scores
 AIC(m_mod_wg_mean)#1871.603
@@ -77,7 +83,7 @@ vif(nlme::gls(m_dist_abs ~ hwi + mass + diet + precip_breadth + temp_breadth +
 
 m_predicted <- predict(m_mod_wg_avg)
 
-m_resid <- elev_mig_mod$m_dist_abs - m_predicted
+m_resid <- elev_mig_mod_wg$m_dist_abs - m_predicted
 
 #qqplots
 qqnorm(m_resid)
@@ -137,7 +143,7 @@ vif(nlme::gls(w_dist_abs ~ hwi + mass + diet + precip_breadth + temp_breadth +
 
 w_predicted <- predict(w_mod_wg_avg)
 
-w_resid <- elev_mig_mod$w_dist_abs - w_predicted
+w_resid <- elev_mig_mod_wg$w_dist_abs - w_predicted
 
 #qqplots
 qqnorm(w_resid)
@@ -197,7 +203,7 @@ vif(nlme::gls(s_dist_abs ~ hwi + mass + diet + precip_breadth + temp_breadth +
 
 s_predicted <- predict(s_mod_wg_avg)
 
-s_resid <- elev_mig_mod$s_dist_abs - s_predicted
+s_resid <- elev_mig_mod_wg$s_dist_abs - s_predicted
 
 #qqplots
 qqnorm(s_resid)
@@ -273,7 +279,7 @@ s_mod_wg_table$Predictor <- sapply(s_mod_wg_table$Predictor, modify_predictor_na
 
 #save
 dist_mod_results_wg <- rbind(s_mod_wg_table, m_mod_wg_table, w_mod_wg_table)
-write.csv(dist_mod_results, "output/distance_model_results.csv", row.names = FALSE)
+write.csv(dist_mod_results_wg, "output/distance_model_results.csv", row.names = FALSE)
 
 #plotting model estimates
 #monsoon
@@ -323,7 +329,7 @@ s_mod_wg_plot
 
 wg_dist_mod_plot <- plot_grid(
   s_mod_wg_plot, NULL, m_mod_wg_plot, NULL, w_mod_wg_plot, 
-  labels = c("(a)", "", "(b)", "", "(c)"), 
+  labels = c("Summer", "", "Monsoon", "", "Winter"), 
   label_fontface = "plain",
   label_size = 8,
   nrow = 5, 
@@ -344,6 +350,8 @@ wg_dist_mod_plot <- ggdraw() +
     size = 8 
   ) +
   theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm"))
+
+wg_dist_mod_plot
 
 #creating model selection table
 s_mod_sel <- s_mod_wg_drg %>% 
@@ -386,9 +394,12 @@ table_mod_sel[] <- lapply(table_mod_sel, function(x) {
   if (is.factor(x)) {
     x <- as.character(x)
   }
-  x[is.na(x)] <- "X"
+  x[is.na(x)] <- "-"
   return(x)
 })
 
 #write file
 write.csv(table_mod_sel, "output/table_mod_sel.csv", row.names = FALSE)
+
+#save workspace image
+save.image("06_pgls_models_distance.RData")

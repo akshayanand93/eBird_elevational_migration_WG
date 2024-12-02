@@ -1,3 +1,8 @@
+#clear environment and perform garbage collection
+rm(list = ls())
+gc()
+
+#load required libraries
 library(data.table)
 library(tidyverse)
 library(ggpubr)
@@ -7,6 +12,7 @@ library(boot)
 theme_set(theme_classic())
 mycolors <- c(summer = "#C7E02F", winter = "#471164FF", monsoon = "#24868EFF")
 
+#read in data and set limits
 dat <- read_csv("data/ebird_elev_residents_WG.csv")
 min_elev <- min(dat$elev)
 max_elev <- max(dat$elev)
@@ -178,3 +184,6 @@ med_30 <- out_50 %>%
         legend.title = element_blank(), 
         legend.position =  "right")
 med_30
+
+#save workspace image
+save.image("02_bias_correction_weighted_bootstrap_estimates.RData")
