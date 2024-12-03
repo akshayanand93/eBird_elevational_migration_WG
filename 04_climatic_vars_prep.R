@@ -52,7 +52,7 @@ ebird_precip <- cbind(ebird_occs, ppt_wg) %>%
 #convert to data table
 ebird_precip <- as.data.table(ebird_precip)
 
-#calculate mean, lower and upper quantiles
+#calculate mean, lower, median, and upper (hq) quantiles
 ebird_precip_val <- ebird_precip[, .(
   precip_mean = mean(unlist(.SD), na.rm = TRUE),
   precip_lq = quantile(unlist(.SD), probs = 0.025, na.rm = TRUE),
@@ -77,7 +77,7 @@ ebird_temp <- cbind(ebird_occs, temp_wg) %>%
 #convert to data table
 ebird_temp <- as.data.table(ebird_temp)
 
-#calculate mean, lower, upper, and median
+#calculate mean, lower, median, and upper (hq) quantiles
 ebird_temp_val <- ebird_temp[, .(
   temp_mean = mean(unlist(.SD), na.rm = TRUE), 
   temp_lq = quantile(unlist(.SD), probs = 0.025, na.rm = TRUE), 
@@ -102,7 +102,7 @@ ebird_wind <- cbind(ebird_occs, wind_wg) %>%
 #convert to data table
 ebird_wind <- as.data.table(ebird_wind)
 
-#calculate mean, lower, upper, and median
+#calculate mean, lower, median and upper (hq) quantiles
 ebird_wind_val <- ebird_wind[, .(
   wind_mean = mean(unlist(.SD), na.rm = TRUE), 
   wind_lq = quantile(unlist(.SD), probs = 0.025, na.rm = TRUE), 
