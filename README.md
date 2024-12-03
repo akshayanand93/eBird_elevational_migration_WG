@@ -16,7 +16,7 @@ This repository contains the code and associated files for a manuscript explorin
 - Uses fitted GAMs and weighted resampling to equate sampling effort across seasons and elevations.
 
 ### `03_method_validation.R`
-- Validates the bias correction method against published methods from Tsai et al. (2021).
+- Validates the bias correction method against published methods from [Tsai et al. (2021)](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/ecog.05196).
 - Data for this script is not included in the repository but is available in the supporting information of the referenced paper.
 
 ### `04_climatic_vars_prep.R`
