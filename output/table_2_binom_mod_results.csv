@@ -1,22 +1,22 @@
-"Predictor","Estimate","LCI","UCI","SE","Z value","P value"
-"(Intercept)",-0.702,-1.069,-0.335,0.187,-3.751,0
-"Temperature Tolerance Range",0.642,0.283,1.002,0.183,3.501,0
-"Precipitation Tolerance Range",-0.43,-0.873,0.012,0.226,-1.906,0.057
-"Temperature Median",0.287,-0.138,0.712,0.217,1.323,0.186
-"Precipitation Median",0.487,0.023,0.951,0.237,2.058,0.04
-"(Intercept)",0.799,-0.936,2.534,0.885,0.902,0.367
-"HWI",-0.198,-0.521,0.124,0.165,-1.206,0.228
-"Aquatic Predator",-1.499,-3.188,0.19,0.862,-1.74,0.082
-"Frugivore",-1.082,-1.981,-0.184,0.458,-2.362,0.018
-"Granivore",-0.458,-1.48,0.564,0.522,-0.878,0.38
-"Invertivore",-0.243,-0.966,0.48,0.369,-0.658,0.51
-"Nectarivore",-0.062,-1.935,1.812,0.956,-0.065,0.948
-"Vertivore",0.865,-4.388,6.117,2.68,0.323,0.747
-"Temperature Tolerance Range",0.349,0.083,0.614,0.135,2.576,0.01
-"Precipitation Tolerance Range",-0.432,-0.736,-0.127,0.155,-2.779,0.005
-"Wind Speed Tolerance Range",0.222,-0.099,0.542,0.164,1.356,0.175
-"Precipitation Median",0.284,-0.004,0.572,0.147,1.934,0.053
-"Wind Speed Median",-0.374,-0.76,0.011,0.197,-1.903,0.057
-"(Intercept)",-1.17,-1.736,-0.604,0.289,-4.052,0
-"Temperature Tolerance Range",0.497,0.157,0.836,0.173,2.867,0.004
-"Precipitation Median",0.464,0.095,0.834,0.189,2.461,0.014
+Predictor,Estimate,LCI,UCI,SE,Z value,P value
+(Intercept),-0.702,-1.069,-0.335,0.187,-3.751,0
+Temperature Tolerance Range,0.642,0.283,1.002,0.183,3.501,0
+Precipitation Tolerance Range,-0.43,-0.873,0.012,0.226,-1.906,0.057
+Temperature Median,0.287,-0.138,0.712,0.217,1.323,0.186
+Precipitation Median,0.487,0.023,0.951,0.237,2.058,0.04
+(Intercept),0.799,-0.936,2.534,0.885,0.902,0.367
+HWI,-0.198,-0.521,0.124,0.165,-1.206,0.228
+Aquatic Predator,-1.499,-3.188,0.19,0.862,-1.74,0.082
+Frugivore,-1.082,-1.981,-0.184,0.458,-2.362,0.018
+Granivore,-0.458,-1.48,0.564,0.522,-0.878,0.38
+Invertivore,-0.243,-0.966,0.48,0.369,-0.658,0.51
+Nectarivore,-0.062,-1.935,1.812,0.956,-0.065,0.948
+Vertivore,0.865,-4.388,6.117,2.68,0.323,0.747
+Temperature Tolerance Range,0.349,0.083,0.614,0.135,2.576,0.01
+Precipitation Tolerance Range,-0.432,-0.736,-0.127,0.155,-2.779,0.005
+Wind Speed Tolerance Range,0.222,-0.099,0.542,0.164,1.356,0.175
+Precipitation Median,0.284,-0.004,0.572,0.147,1.934,0.053
+Wind Speed Median,-0.374,-0.76,0.011,0.197,-1.903,0.057
+(Intercept),-1.17,-1.736,-0.604,0.289,-4.052,0
+Temperature Tolerance Range,0.497,0.157,0.836,0.173,2.867,0.004
+Precipitation Median,0.464,0.095,0.834,0.189,2.461,0.014
