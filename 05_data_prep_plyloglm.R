@@ -116,6 +116,12 @@ elev_mig_wg <- elev_mig_wg %>%
          w_dist_abs = abs(m_w_mig), #winter
          s_dist_abs = abs(w_s_mig)) #summer
 
+#the Malabar Whistling Thrush is listed as an Aquatic Predator however this species 
+#is primarily an invertivore. Reclassifying this diet category.
+elev_mig_wg$diet <- ifelse(elev_mig_wg$diet == "Aquatic predator", "Invertivore", 
+                           elev_mig_wg$diet)
+
+
 #save data
 fwrite(elev_mig_wg, file.path("output", "elev_mig_climate_wg.csv"), row.names = FALSE)
 
@@ -209,7 +215,8 @@ resident_list <- sp_list_df(sp_list = resident_species, taxon = "bird")
 
 #five genus missing from bird tree, write file to manually input genus and family
 fwrite(resident_list, file.path("data", "resident_list.csv"), row.names = FALSE)
-#family of the following species was changed - Yungipicus_nanus -> Picidae, Rubigula_gularis -> Pycnonotidae,
+#family of the following species was changed - Yungipicus_nanus -> Picidae, 
+#Rubigula_gularis -> Pycnonotidae,
 #Montecincla_cachinnans - Montecincla_fairbanki - Montecincla_meridionalis - Pterorhinus_delesserti -> Timaliidae
 #Sholicola_major - Sholicola_albiventris -> Muscicapidae
 
@@ -288,7 +295,7 @@ modify_predictor_names <- function(name) {
   name <- gsub("med", "Median", name)
   name <- gsub("mean", "Mean", name)  
   name <- gsub("breadth", "Tolerance Range", name)  
-  name <- gsub("hwi", "HWI", name, ignore.case = TRUE)  
+  name <- gsub("hwi", "Hand-Wing Index", name, ignore.case = TRUE)  
   name <- gsub("mass", "Body Mass", name, ignore.case = TRUE)  
   name <- gsub("diet", "", name, ignore.case = TRUE)
   name <- gsub("_", " ", name)
@@ -306,7 +313,7 @@ m_binom_mod <- phyloglmstep(m_migrant ~ hwi + mass + diet + temp_breadth + preci
                               wind_breadth + temp_med + precip_med + wind_med, 
                             data = elev_mig_binom_df_wg, phy = cons_resident_tree, 
                             method = "logistic_MPLE", direction = "backward")
-summary(m_binom_mod)#frugivore & precip_breadth -ve significant, temp_breadth +ve significant
+summary(m_binom_mod)#frugivore, wind_med & precip_breadth -ve significant, temp_breadth +ve significant
 
 #save results
 summary_m_binom_mod <- summary(m_binom_mod)
@@ -384,8 +391,8 @@ s_binom_mod_plot
 #separate predictor names
 m_binom_mod_table$Predictor <- c(
   "(Intercept)",
-  "HWI",
-  "Aquatic\nPredator",
+  "Hand-Wing\nIndex",
+  "Body\nMass",
   "Frugivore",
   "Granivore",
   "Invertivore",
@@ -410,12 +417,12 @@ m_binom_mod_plot <- m_binom_mod_table %>%
     "Temperature\nTolerance\nRange",
     "Precipitation\nMedian",
     "Wind Speed\nTolerance\nRange",
-    "HWI",
+    "Body\nMass",
+    "Hand-Wing\nIndex",
     "Invertivore",
     "Granivore",
     "Nectarivore",
     "Frugivore",
-    "Aquatic\nPredator",
     "Vertivore",
     "Precipitation\nTolerance\nRange",
     "Wind Speed\nMedian", 

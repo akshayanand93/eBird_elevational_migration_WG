@@ -340,7 +340,7 @@ wg_dist_mod_plot <- plot_grid(
 )
 
 wg_dist_mod_plot <- ggdraw() +
-  draw_plot(wg_mod_plot, 0, 0.025, 1, 0.975) + 
+  draw_plot(wg_dist_mod_plot, 0, 0.025, 1, 0.975) + 
   draw_label(
     "Model Estimate (m) ± CI", 
     x = 0.5, 
